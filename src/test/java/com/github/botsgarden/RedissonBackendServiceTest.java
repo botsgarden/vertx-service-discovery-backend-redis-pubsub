@@ -1,6 +1,5 @@
 package com.github.botsgarden;
 
-import com.github.botsgarden.RedissonBackendService;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.types.HttpEndpoint;
@@ -8,7 +7,9 @@ import io.vertx.servicediscovery.Record;
 import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;
+
 import java.util.concurrent.atomic.AtomicReference;
+
 import static com.jayway.awaitility.Awaitility.await;
 
 public class RedissonBackendServiceTest extends TestCase {
@@ -25,6 +26,11 @@ public class RedissonBackendServiceTest extends TestCase {
       .put("key", "redisson-ms")
     );
 
+    RedissonBackendService.topic(
+      new JsonObject()
+      .put("channel", "redisson-topic")
+    );
+
   }
 
   @Test
@@ -39,17 +45,14 @@ public class RedissonBackendServiceTest extends TestCase {
 
     AtomicReference<String> action = new AtomicReference<>();
 
-    redissonBackend.onStorePubEvent(ar -> {
+    RedissonBackendService.onEvent(ar -> {
       if(ar.succeeded()) {
         System.out.println(
           ar.result().getJsonObject("record")
         );
         action.set(ar.result().getString("action"));
       }
-    }).onErrorPubEvent(ar -> {
-      System.out.println(ar.result().getString("error"));
     });
-
 
     redissonBackend.store(record, res -> {
       if(!res.succeeded()) {
@@ -75,17 +78,14 @@ public class RedissonBackendServiceTest extends TestCase {
     AtomicReference<String> action = new AtomicReference<>();
     AtomicReference<String> reference = new AtomicReference<>();
 
-    redissonBackend.onRemovePubEvent(ar -> {
+    RedissonBackendService.onEvent(ar -> {
       if(ar.succeeded()) {
         System.out.println(
           ar.result().getJsonObject("record")
         );
         action.set(ar.result().getString("action"));
       }
-    }).onErrorPubEvent(ar -> {
-      System.out.println(ar.result().getString("error"));
     });
-
 
     redissonBackend.store(record, res -> {
       if(!res.succeeded()) {
@@ -122,15 +122,13 @@ public class RedissonBackendServiceTest extends TestCase {
     AtomicReference<String> action = new AtomicReference<>();
     AtomicReference<String> reference = new AtomicReference<>();
 
-    redissonBackend.onUpdatePubEvent(ar -> {
+    RedissonBackendService.onEvent(ar -> {
       if(ar.succeeded()) {
         System.out.println(
           ar.result().getJsonObject("record")
         );
         action.set(ar.result().getString("action"));
       }
-    }).onErrorPubEvent(ar -> {
-      System.out.println(ar.result().getString("error"));
     });
 
 

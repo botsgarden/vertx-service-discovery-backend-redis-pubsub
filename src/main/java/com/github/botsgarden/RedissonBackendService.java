@@ -38,11 +38,36 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
   private RTopic<JsonObject> topic;
   private RSetAsync<Record> rSet;
 
-  private Handler<AsyncResult<JsonObject>> onStoreHandler;
-  private Handler<AsyncResult<JsonObject>> onRemoveHandler;
-  private Handler<AsyncResult<JsonObject>> onUpdateHandler;
-  private Handler<AsyncResult<JsonObject>> onOtherHandler;
-  private Handler<AsyncResult<JsonObject>> onErrorHandler;
+  private static RTopic<JsonObject> staticTopic;
+  private static RedissonClient staticRedisson;
+  public static RTopic<JsonObject> topic() {
+    return  staticTopic;
+  }
+  public static void topic(JsonObject configuration) {
+    //TODO singleton
+    String channel = configuration.getString("channel", "default");
+    try {
+      Config config = new Config();
+      config.useSingleServer().setAddress(
+        configuration.getString("redis_url","redis://127.0.0.1:6379" )
+      ).setPassword(
+        configuration.getString("redis_password", null)
+      );
+      staticRedisson = Redisson.create(config);
+      staticTopic = staticRedisson.getTopic(channel);
+    } catch (Exception e) {
+      throw new Error("😡 : " + e.getMessage());
+    }
+  }
+
+  public static void onEvent(Handler<AsyncResult<JsonObject>> handler) {
+    staticTopic.addListener(new MessageListener<JsonObject>() {
+      @Override
+      public void onMessage(String channel, JsonObject msg) {
+        handler.handle(Future.succeededFuture(msg));
+      }
+    });
+  }
 
   @Override
   public void init(Vertx vertx, JsonObject configuration) {
@@ -67,69 +92,8 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
 
     rSet = redisson.getSet(key);
 
-    nothing(ar -> {}); // initialize handlers to nothing
-
-    topic.addListener(new MessageListener<JsonObject>() {
-      @Override
-      public void onMessage(String channel, JsonObject msg) {
-
-        //System.out.println("### message ###");
-        //System.out.println("- channel: " + channel);
-        //System.out.println("- message: " + msg.encodePrettily());
-
-        switch (msg.getString("action")) {
-          case "store":
-            onStoreHandler.handle(Future.succeededFuture(msg));
-            break;
-          case "remove":
-            onRemoveHandler.handle(Future.succeededFuture(msg));
-            break;
-          case "update":
-            onUpdateHandler.handle(Future.succeededFuture(msg));
-            break;
-          case "error":
-            onErrorHandler.handle(Future.succeededFuture(msg)); // succeededFuture?
-            break;
-          default:
-            onOtherHandler.handle(Future.succeededFuture(msg));
-        }
-      }
-    });
-
   }
 
-  private void nothing(Handler<AsyncResult<JsonObject>> handler) {
-    onStoreHandler = handler;
-    onRemoveHandler = handler;
-    onUpdateHandler = handler;
-    onOtherHandler = handler;
-    onErrorHandler = handler;
-  }
-
-  public RedissonBackendService onStorePubEvent(Handler<AsyncResult<JsonObject>> handler) {
-    onStoreHandler = handler;
-    return this;
-  }
-
-  public RedissonBackendService onRemovePubEvent(Handler<AsyncResult<JsonObject>> handler) {
-    onRemoveHandler = handler;
-    return this;
-  }
-
-  public RedissonBackendService onUpdatePubEvent(Handler<AsyncResult<JsonObject>> handler) {
-    onUpdateHandler = handler;
-    return this;
-  }
-
-  public RedissonBackendService onOtherPubEvent(Handler<AsyncResult<JsonObject>> handler) {
-    onOtherHandler = handler;
-    return this;
-  }
-
-  public RedissonBackendService onErrorPubEvent(Handler<AsyncResult<JsonObject>> handler) {
-    onErrorHandler = handler;
-    return this;
-  }
 
   @Override
   public void store(Record record, Handler<AsyncResult<Record>> resultHandler) {

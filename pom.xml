@@ -6,7 +6,7 @@
 
   <groupId>com.github.botsgarden</groupId>
   <artifactId>vertx-service-discovery-backend-redisson</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
 
   <properties>
     <vertx.version>3.4.2</vertx.version>
