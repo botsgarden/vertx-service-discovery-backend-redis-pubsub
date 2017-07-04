@@ -44,31 +44,6 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
   private Handler<AsyncResult<JsonObject>> onOtherHandler;
   private Handler<AsyncResult<JsonObject>> onErrorHandler;
 
-
-
-  /*
-      discovery = ServiceDiscovery.create(
-      vertx,
-      serviceDiscoveryOptions.setBackendConfiguration(
-        new JsonObject()
-          .put("host", redisHost)
-          .put("port", redisPort)
-          .put("auth", redisAuth)
-          .put("key", redisRecordsKey)
-      ));
-
-      discovery = ServiceDiscovery.create(
-      vertx,
-      serviceDiscoveryOptions.setBackendConfiguration(
-        new JsonObject()
-          .put("redis_url", redis_url)
-          .put("redis_password", redis_password)
-          .put("key", redisRecordsKey)
-          .put("channel", channel)
-      ));
-   */
-
-
   @Override
   public void init(Vertx vertx, JsonObject configuration) {
 
@@ -272,11 +247,10 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
       }
       return res;
     });
-
   }
 
   @Override
   public void getRecord(String uuid, Handler<AsyncResult<Record>> resultHandler) {
-
+    //TODO
   }
 }

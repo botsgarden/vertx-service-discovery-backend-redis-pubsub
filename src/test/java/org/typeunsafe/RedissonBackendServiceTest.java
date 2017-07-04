@@ -1,6 +1,5 @@
 package org.typeunsafe;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.types.HttpEndpoint;
@@ -213,7 +212,7 @@ public class RedissonBackendServiceTest extends TestCase {
     redissonBackend.getRecords(res -> {
 
       res.result().forEach(service -> {
-        System.out.println(service.getName() + "" + service.getRegistration());
+        System.out.println(service.getName() + ": " + service.getRegistration());
       });
 
       count.set(res.result().size());
@@ -222,6 +221,4 @@ public class RedissonBackendServiceTest extends TestCase {
     await().until(() -> count.get() != null);
     assertNotNull(count);
   }
-
-
 }
