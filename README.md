@@ -1,1 +1,1 @@
-# vertx-service-discovery-backend-redis-pubsub
+# vertx-service-discovery-backend-redisson
