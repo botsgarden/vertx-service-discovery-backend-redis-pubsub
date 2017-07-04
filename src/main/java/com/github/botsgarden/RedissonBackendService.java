@@ -73,9 +73,9 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
       @Override
       public void onMessage(String channel, JsonObject msg) {
 
-        System.out.println("### message ###");
-        System.out.println("- channel: " + channel);
-        System.out.println("- message: " + msg.encodePrettily());
+        //System.out.println("### message ###");
+        //System.out.println("- channel: " + channel);
+        //System.out.println("- message: " + msg.encodePrettily());
 
         switch (msg.getString("action")) {
           case "store":
