@@ -1,5 +1,6 @@
-package bots.garden;
+package com.github.botsgarden;
 
+import com.github.botsgarden.RedissonBackendService;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.types.HttpEndpoint;
