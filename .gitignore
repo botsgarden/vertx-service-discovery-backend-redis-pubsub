@@ -1,0 +1,10 @@
+.idea/
+.vertx/
+*.class
+*.log
+*.iml
+.project
+.classpath
+.settings
+.vscode
+target/
