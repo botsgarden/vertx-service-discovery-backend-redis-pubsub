@@ -4,7 +4,6 @@
 [![](https://jitpack.io/v/botsgarden/vertx-service-discovery-backend-redisson.svg)](https://jitpack.io/#botsgarden/vertx-service-discovery-backend-redisson)
 
 
-
 ## Using JitPack
 
 > see https://jitpack.io/
@@ -28,6 +27,6 @@
   <dependency>
     <groupId>com.github.botsgarden</groupId>
     <artifactId>vertx-service-discovery-backend-redisson</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </dependency>
 ```
