@@ -1,4 +1,4 @@
-package com.github.botsgarden;
+package bots.garden;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
