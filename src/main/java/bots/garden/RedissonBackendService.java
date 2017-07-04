@@ -46,6 +46,7 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
 
   @Override
   public void init(Vertx vertx, JsonObject configuration) {
+    System.out.println("🤖 Redisson backend initializing...");
 
     key = configuration.getString("key", "records");
     channel = configuration.getString("channel", "default");
