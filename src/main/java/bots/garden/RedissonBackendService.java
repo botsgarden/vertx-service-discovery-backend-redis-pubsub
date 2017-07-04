@@ -1,4 +1,4 @@
-package org.typeunsafe;
+package bots.garden;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
