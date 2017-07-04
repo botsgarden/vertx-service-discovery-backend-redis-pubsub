@@ -4,7 +4,10 @@
 [![](https://jitpack.io/v/botsgarden/vertx-service-discovery-backend-redisson.svg)](https://jitpack.io/#botsgarden/vertx-service-discovery-backend-redisson)
 
 
-## Using JitPack
+## Using the Redisson Backend
+
+- register on JitPack
+- creat a :octocat: release
 
 > see https://jitpack.io/
 
