@@ -38,13 +38,19 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
   private RTopic<JsonObject> topic;
   private RSetAsync<Record> rSet;
 
+  private static JsonObject configuration;
+
   private static RTopic<JsonObject> staticTopic;
   private static RedissonClient staticRedisson;
-  public static RTopic<JsonObject> topic() {
+
+  /*
+  private static RTopic<JsonObject> topic() {
     return  staticTopic;
   }
-  public static void topic(JsonObject configuration) {
-    //TODO singleton
+  */
+
+  private static void setTopic() {
+    //String key = configuration.getString("key", "records");
     String channel = configuration.getString("channel", "default");
     try {
       Config config = new Config();
@@ -85,13 +91,15 @@ public class RedissonBackendService implements ServiceDiscoveryBackend {
         configuration.getString("redis_password", null)
       );
       redisson = Redisson.create(config);
+      RedissonBackendService.configuration = configuration; // usable for topic
+      RedissonBackendService.setTopic();
+
+
     } catch (Exception e) {
       throw new Error("😡 : " + e.getMessage());
     }
     topic = redisson.getTopic(channel);
-
     rSet = redisson.getSet(key);
-
   }
 
 

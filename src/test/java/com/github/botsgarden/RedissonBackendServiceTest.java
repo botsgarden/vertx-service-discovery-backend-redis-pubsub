@@ -25,11 +25,12 @@ public class RedissonBackendServiceTest extends TestCase {
       .put("channel", "redisson-topic")
       .put("key", "redisson-ms")
     );
-
+    /*
     RedissonBackendService.topic(
       new JsonObject()
       .put("channel", "redisson-topic")
     );
+    */
 
   }
 
